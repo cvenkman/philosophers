@@ -1,15 +1,4 @@
-
 #include "philo.h"
-
-// void *print(void *arr)
-// {
-// 	pthread_mutex_lock(&mutex);
-// 	for (int i = 0; i < 10; i++)
-// 		(int *)arr[i] = i + ((int *)arr[i]);
-// 	// printarr
-// 	pthread_mutex_unlock(&mutex);
-// 	return NULL;
-// }
 
 // void threads()
 // {
@@ -28,46 +17,65 @@
 // 	write(1, "EX\n", 3);
 // }
 
-int ft_philo(pthread_mutex_t *mutex)
-{
-	static int i;
+// int ft_philo()
+// {
+// 	static int i;
 
-	pthread_mutex_lock(mutex);
-	i++;
-	printf("ass #%d\n", i);
-	pthread_mutex_unlock(mutex);
+// 	pthread_mutex_lock(mutex);
+// 	i++;
+// 	printf("ass #%d\n", i);
+// 	pthread_mutex_unlock(mutex);
 	
-	return (0);
+// 	return (0);
+// }
+
+
+void print_message(pthread_mutex_t *mutex_print, t_data *data, int id, char *msg)
+{
+	// pthread_mutex_lock(&(data->mutex_print));
+	pthread_mutex_lock(mutex_print);
+	printf("%u %d %s\n", (get_time() - data->start_time), id, msg);
+	pthread_mutex_unlock(mutex_print);
+	// pthread_mutex_unlock(&(data->mutex_print));
+}
+
+void ft_eat()
+{
+	
+}
+
+void start(t_data *data)
+{
+	
 }
 
 int philo_create(int nbr_of_philo, t_data *data)
 {
-	int			i;
-	int			ret;
-	pthread_t	philo[nbr_of_philo];
-	char *str = "1_1_1_1_1\n";
+	int					i;
+	int					ret;
+	pthread_t			philo[nbr_of_philo];
 	pthread_mutex_t		mutex;
 
-
 	i = 0;
+	data->start_time = get_time();
 	while (i < nbr_of_philo)
 	{
-		pthread_create(&(philo[i]), NULL, (void *)ft_philo, &mutex);
-		// if (pthread_create(&(philo[i]), NULL, (void *)ft_philo, (void *)(data->mutex)) == -1)
-		// {
-		// 	write(2, "failed to create philo live as thread\n", 39);
-		// 	return (-1);
-		// }
-		usleep(10);
+		if (pthread_create(&(philo[i]), NULL, (void *)start, data) == -1)
+		{
+			write(2, "failed to create philo live as thread\n", 39);
+			return (-1);
+		}
+		usleep(10000);
 		i++;
 	}
 	return (0);
 }
-
 int main(int argc, char **argv)
 {
-	t_data	data;
-	int i = 0;
+	t_data		data;
+	int			i = 1;
+	pthread_mutex_t mutex_print;
+
 	if (argc != 5 && argc != 6)
 	{
 		write (2, "invalid number of arg\n", 23);
@@ -80,7 +88,12 @@ int main(int argc, char **argv)
 	data.nbr_philo_must_eat = 0;
 	if (argc == 6)
 		data.nbr_philo_must_eat = ft_atoi(argv[5]);
+	while (i < data.nbr_of_philo)
+	{
+		data.philos[i].id = i;
+		i++;
+	}
 	if (philo_create(data.nbr_of_philo, &data) != 0)
 		return (-1);
-
+	print_message(&mutex_print, &data, data.philos[3].id, EAT);
 }
