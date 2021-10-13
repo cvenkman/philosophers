@@ -13,6 +13,8 @@
 #define THINK	"is thinking"
 #define DIE		"died"
 
+typedef struct	s_data t_data;
+
 typedef struct s_philo
 {
 	int				id;
@@ -22,6 +24,7 @@ typedef struct s_philo
 	int				l_fork;
 	int				r_fork;
 	int				eat_count;
+	t_data			*data;
 }					t_philo;
 
 typedef struct	s_data

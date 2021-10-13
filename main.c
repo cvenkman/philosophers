@@ -39,14 +39,22 @@ void print_message(pthread_mutex_t *mutex_print, t_data *data, int id, char *msg
 	// pthread_mutex_unlock(&(data->mutex_print));
 }
 
-void ft_eat()
-{
-	
-}
+// void forks(t_data *data)
+// {
+// 	pthread_mutex_lock(data->philos->left_fork);
+// }
 
-void start(t_data *data)
+// void ft_eat(t_data *data)
+// {
+// 	print_message(&mutex_print, &data, data.philos[3].id, EAT);
+// }
+
+void start(t_philo philos)
 {
-	
+	pthread_mutex_t *mutex_print;
+	// forks();
+	// ft_eat(data);
+	print_message(mutex_print, philos.data, philos.id, EAT);
 }
 
 int philo_create(int nbr_of_philo, t_data *data)
@@ -60,7 +68,7 @@ int philo_create(int nbr_of_philo, t_data *data)
 	data->start_time = get_time();
 	while (i < nbr_of_philo)
 	{
-		if (pthread_create(&(philo[i]), NULL, (void *)start, data) == -1)
+		if (pthread_create(&(philo[i]), NULL, (void *)start, &(data->philos[i])) == -1)
 		{
 			write(2, "failed to create philo live as thread\n", 39);
 			return (-1);
@@ -70,6 +78,7 @@ int philo_create(int nbr_of_philo, t_data *data)
 	}
 	return (0);
 }
+
 int main(int argc, char **argv)
 {
 	t_data		data;
@@ -91,9 +100,10 @@ int main(int argc, char **argv)
 	while (i < data.nbr_of_philo)
 	{
 		data.philos[i].id = i;
+		data.philos[i].data = &data;
 		i++;
 	}
 	if (philo_create(data.nbr_of_philo, &data) != 0)
 		return (-1);
-	print_message(&mutex_print, &data, data.philos[3].id, EAT);
+	
 }
