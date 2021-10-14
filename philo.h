@@ -7,11 +7,18 @@
 # include <sys/time.h>
 # include "libft/libft.h"
 
-#define FORK	"has taken a fork"
-#define EAT 	"is eating"
-#define SLEEP 	"is sleeping"
-#define THINK	"is thinking"
-#define DIE		"died"
+#define FORK	0
+#define EAT 	1
+#define SLEEP 	2
+#define THINK	3
+#define DIE		4
+
+# define R	"\x1b[31m"
+# define G	"\x1b[32m"
+# define Y	"\x1b[33m"
+# define M  "\x1b[35m"
+# define X  "\x1b[36m"
+# define RS	"\x1b[0m"
 
 struct	s_data;
 
@@ -24,7 +31,7 @@ typedef struct s_philo
 	int				r_fork;
 	pthread_t		thread;
 	// int				eat_now;
-	// int				eat_count;
+	int				eat_count;
 	struct s_data	*data;
 }					t_philo;
 
@@ -37,10 +44,11 @@ typedef struct	s_data
 	int					nbr_philo_must_eat;
 	unsigned int		start_time;
 	pthread_mutex_t		*forks;
-	// pthread_mutex_t		*r_fork;
 	t_philo				*philos;
+	pthread_mutex_t		to_do;
 	pthread_mutex_t		mutex_print;
 	pthread_mutex_t		check_dead;
+	pthread_mutex_t		eat_check;
 }						t_data;
 
 unsigned int	get_time(void);
