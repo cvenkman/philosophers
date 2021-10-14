@@ -13,18 +13,19 @@
 #define THINK	"is thinking"
 #define DIE		"died"
 
-typedef struct	s_data t_data;
+struct	s_data;
 
 typedef struct s_philo
 {
 	int				id;
-	int				eat_now;
 	unsigned int	limit_time;
 	unsigned int	start_time_eat;
 	int				l_fork;
 	int				r_fork;
-	int				eat_count;
-	t_data			*data;
+	pthread_t		thread;
+	// int				eat_now;
+	// int				eat_count;
+	struct s_data	*data;
 }					t_philo;
 
 typedef struct	s_data
@@ -37,8 +38,9 @@ typedef struct	s_data
 	unsigned int		start_time;
 	pthread_mutex_t		*forks;
 	// pthread_mutex_t		*r_fork;
-	t_philo philos[200];
+	t_philo				*philos;
 	pthread_mutex_t		mutex_print;
+	pthread_mutex_t		check_dead;
 }						t_data;
 
 unsigned int	get_time(void);
