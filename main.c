@@ -1,32 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/18 18:23:18 by cvenkman          #+#    #+#             */
+/*   Updated: 2021/10/18 19:57:41 by cvenkman         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
-
-void print_message(t_data *data, int id, int msg)
-{
-	pthread_mutex_lock(&data->mutex_print);
-	ft_putnbr_fd(get_time() - data->start_time, 1);
-	write(1, " ", 1);
-	ft_putnbr_fd(id, 1);
-	if (msg == 0)
-		ft_putendl_fd(M" has taken a fork"RS, 1);
-	if (msg == 1)
-		ft_putendl_fd(G" is eating"RS, 1);
-	if (msg == 2)
-		ft_putendl_fd(Y" is sleeping"RS, 1);
-	if (msg == 3)
-		ft_putendl_fd(X" is thinking"RS, 1);
-	if (msg == 4)
-		ft_putendl_fd(R" died"RS, 1);
-	pthread_mutex_unlock(&data->mutex_print);
-}
-
-void my_sleep(long int time)
-{
-	long int start_time;
-
-	start_time = get_time();
-	while (get_time() - start_time < time)
-		usleep(1);
-}
 
 void take_forks(t_philo *philos)
 {
@@ -48,7 +32,9 @@ void eat(t_philo *philos)
 {
 	pthread_mutex_lock(&philos->data->to_do);
 	print_message(philos->data, philos->id, EAT);
+	
 	philos->eat_count++;
+	
 	my_sleep(philos->data->time_to_eat);
 	pthread_mutex_unlock(&philos->data->to_do);
 }
@@ -59,7 +45,9 @@ void *start(void *philos_tmp)
 	philos = philos_tmp;
 
 	while (1)
-	{
+	{	
+		if (philos->eat_count == philos->data->nbr_philo_must_eat)
+			philos->done = 1;
 		take_forks(philos);
 		eat(philos);
 		ft_sleep(philos);
@@ -69,43 +57,12 @@ void *start(void *philos_tmp)
 	return (NULL);
 }
 
-void *monitor(void *data_tmp)
-{
-	t_data	*data;
-	int		i;
-	int		u;
-
-	data = data_tmp;
-	i = 0;
-	u = 0;
-	// while (i < data->nbr_philo_must_eat)
-	// {
-		pthread_mutex_lock(&data->eat_check);
-		
-		while (i <= data->nbr_of_philo)
-		{
-
-			if (data->philos[i].eat_count <= data->nbr_philo_must_eat)
-			{
-				printf("%d %d\n", i, data->nbr_philo_must_eat);
-				break ;
-			}
-			i++;
-		}
-		if (i == data->nbr_of_philo)
-			exit(0);
-		pthread_mutex_unlock(&data->eat_check);
-	// }
-
-	return (NULL);
-}
-
 int philo_create(t_data *data)
 {
 	int				i;
 	int				ret;
 	pthread_t		philo[data->nbr_of_philo];
-	pthread_t		monitor_id;
+	// pthread_t		monitor_id;
 
 	i = 0;
 	data->start_time = get_time();
@@ -117,52 +74,53 @@ int philo_create(t_data *data)
 			return (-1);
 		}
 		pthread_detach(data->philos[i].thread);
-		my_sleep(1000);
 		i++;
+		my_sleep(10);
 	}
-	if (pthread_create(&monitor_id, NULL, monitor, (void *)data) == -1)
-		return (-1);
-	pthread_join(monitor_id, NULL);
 	return (0);
 }
 
-void init_philos(t_data *data)
+
+void *monitor(void *data_tmp)
 {
-	int			i = 0;
-	data->philos = malloc(sizeof(t_philo) * data->nbr_of_philo);
-	if (!data->philos)
-		return ;
-	while (i < data->nbr_of_philo)
+	t_data	*data;
+	int		i;
+	int		done;
+
+	data = (t_data *)data_tmp;
+	while (1)
 	{
-		data->philos[i].id = i;
-		data->philos[i].l_fork = i;
-		data->philos[i].r_fork = i + 1;
-		if (data->philos[i].r_fork > data->nbr_of_philo - 1)
-			data->philos[i].r_fork = 0;
-		data->philos[i].data = data;
-		data->philos[i].eat_count = 0;
-		i++;
+		
+		i = 0;
+		// done = 1;
+		while (i <= data->nbr_of_philo)
+		{
+			
+			// if (data->philos[i].done == 0)
+			// {
+			// 	done = 0;
+			// }
+			printf("==== id = %d ---- eat_count = %d --- must %d --- done %d\n", data->philos[i].id, 
+				data->philos->eat_count, data->nbr_philo_must_eat, data->philos[i].done);
+			i++;
+		}
+		// if (done == 1)
+		// {
+		// 	pthread_mutex_lock(&data->mutex_print);
+		// 	printf("====================================================================================\n");
+		// 	return (NULL);
+		// }
 	}
 }
 
-int init_mutex(t_data *data)
+void *ft_monitor(void *data)
 {
-	int	i;
+	pthread_t	monitor_thread;
 
-	i = 0;
-	pthread_mutex_init(&data->mutex_print, NULL);
-	pthread_mutex_init(&data->check_dead, NULL);
-	pthread_mutex_init(&data->to_do, NULL);
-	pthread_mutex_init(&data->eat_check, NULL);
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->nbr_of_philo);
-	if (!data->forks)
-		return (-1);
-	while (i < data->nbr_of_philo)
-	{
-		pthread_mutex_init(&data->forks[i], NULL);
-		i++;
-	}
-	return (0);
+	if (pthread_create(&monitor_thread, NULL, monitor, (void *)data) == -1)
+		return (NULL);
+	pthread_join(monitor_thread, NULL);
+	return (NULL);
 }
 
 int main(int argc, char **argv)
@@ -186,5 +144,6 @@ int main(int argc, char **argv)
 	init_mutex(&data);
 	if (philo_create(&data) != 0)
 		return (-1);
-	
+	ft_monitor(&data);
+
 }

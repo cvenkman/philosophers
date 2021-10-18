@@ -24,13 +24,14 @@ struct	s_data;
 
 typedef struct s_philo
 {
-	int				id;
 	unsigned int	limit_time;
 	unsigned int	start_time_eat;
+	int				id;
 	int				l_fork;
 	int				r_fork;
 	pthread_t		thread;
 	// int				eat_now;
+	int				done;
 	int				eat_count;
 	struct s_data	*data;
 }					t_philo;
@@ -46,11 +47,16 @@ typedef struct	s_data
 	pthread_mutex_t		*forks;
 	t_philo				*philos;
 	pthread_mutex_t		to_do;
+	pthread_t			monitor;
 	pthread_mutex_t		mutex_print;
 	pthread_mutex_t		check_dead;
 	pthread_mutex_t		eat_check;
 }						t_data;
 
 unsigned int	get_time(void);
+int				init_mutex(t_data *data);
+void			my_sleep(long int time);
+void			print_message(t_data *data, int id, int msg);
+void			init_philos(t_data *data);
 
 #endif
