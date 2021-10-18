@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:21:36 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/18 18:22:26 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/10/18 20:13:53 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void init_philos(t_data *data)
 	data->philos = malloc(sizeof(t_philo) * data->nbr_of_philo);
 	if (!data->philos)
 		return ;
-	while (i < data->nbr_of_philo)
+	while (i < data->nbr_of_philo) //ft_bzero
 	{
 		data->philos[i].id = i;
 		data->philos[i].done = 0;

@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:18 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/18 20:06:19 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/10/18 20:22:41 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,15 @@ void ft_sleep(t_philo *philos)
 	print_message(philos->data, philos->id, SLEEP);
 	pthread_mutex_unlock(&(philos->data->forks[philos->l_fork]));
 	pthread_mutex_unlock(&(philos->data->forks[philos->r_fork]));
-	my_sleep(philos->data->time_to_sleep);
+	usleep(philos->data->time_to_sleep);
 }
 
 void eat(t_philo *philos)
 {
 	pthread_mutex_lock(&philos->data->to_do);
 	print_message(philos->data, philos->id, EAT);
-	
 	philos->eat_count++;
-	
-	my_sleep(philos->data->time_to_eat);
+	usleep(philos->data->time_to_eat);
 	pthread_mutex_unlock(&philos->data->to_do);
 }
 
@@ -74,7 +72,7 @@ int philo_create(t_data *data)
 		}
 		pthread_detach(data->philos[i].thread);
 		i++;
-		my_sleep(10);
+		my_sleep(1000000);
 	}
 	return (0);
 }
@@ -136,6 +134,6 @@ int main(int argc, char **argv)
 	init_mutex(&data);
 	if (philo_create(&data) != 0)
 		return (-1);
-	ft_monitor(&data);
-
+	if (argc == 6)
+		ft_monitor(&data);
 }

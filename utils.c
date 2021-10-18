@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:12 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/18 18:23:12 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/10/18 20:22:10 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,16 @@ unsigned int	get_time(void)
 void my_sleep(long int time)
 {
 	long int start_time;
+	long int i = 0;
 
 	start_time = get_time();
-	while (get_time() - start_time < time)
+	// while (get_time() - start_time < time)
+	// 	usleep(1);
+	while (i != time)
+	{
 		usleep(1);
+		i++;
+	}
 }
 
 void print_message(t_data *data, int id, int msg)
