@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:18 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/18 19:57:41 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/10/18 20:06:19 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int philo_create(t_data *data)
 	int				i;
 	int				ret;
 	pthread_t		philo[data->nbr_of_philo];
-	// pthread_t		monitor_id;
 
 	i = 0;
 	data->start_time = get_time();
@@ -90,26 +89,19 @@ void *monitor(void *data_tmp)
 	data = (t_data *)data_tmp;
 	while (1)
 	{
-		
 		i = 0;
-		// done = 1;
-		while (i <= data->nbr_of_philo)
+		done = 1;
+		while (i < data->nbr_of_philo)
 		{
-			
-			// if (data->philos[i].done == 0)
-			// {
-			// 	done = 0;
-			// }
-			printf("==== id = %d ---- eat_count = %d --- must %d --- done %d\n", data->philos[i].id, 
-				data->philos->eat_count, data->nbr_philo_must_eat, data->philos[i].done);
+			if (data->philos[i].done == 0)
+				done = 0;
 			i++;
 		}
-		// if (done == 1)
-		// {
-		// 	pthread_mutex_lock(&data->mutex_print);
-		// 	printf("====================================================================================\n");
-		// 	return (NULL);
-		// }
+		if (done == 1)
+		{
+			pthread_mutex_lock(&data->mutex_print);
+			return (NULL);
+		}
 	}
 }
 
