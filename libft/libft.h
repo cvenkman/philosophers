@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 18:43:54 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/09/20 20:11:59 by tphlogis         ###   ########.fr       */
+/*   Updated: 2021/10/19 17:02:20 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ int		ft_lstsize(t_list *lst);
 void	perror_exit(char *str);
 long	max(long a, long b);
 long	min(long a, long b);
+int		return_error(char *str);
 
 #endif

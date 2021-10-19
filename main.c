@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:18 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/18 20:22:41 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/10/19 17:08:21 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void ft_sleep(t_philo *philos)
 	print_message(philos->data, philos->id, SLEEP);
 	pthread_mutex_unlock(&(philos->data->forks[philos->l_fork]));
 	pthread_mutex_unlock(&(philos->data->forks[philos->r_fork]));
-	usleep(philos->data->time_to_sleep);
+	my_sleep(philos->data->time_to_sleep);
 }
 
 void eat(t_philo *philos)
@@ -33,7 +33,7 @@ void eat(t_philo *philos)
 	pthread_mutex_lock(&philos->data->to_do);
 	print_message(philos->data, philos->id, EAT);
 	philos->eat_count++;
-	usleep(philos->data->time_to_eat);
+	my_sleep(philos->data->time_to_eat);
 	pthread_mutex_unlock(&philos->data->to_do);
 }
 
@@ -66,13 +66,10 @@ int philo_create(t_data *data)
 	while (i < data->nbr_of_philo)
 	{
 		if (pthread_create(&(data->philos[i].thread), NULL, start, &(data->philos[i])) == -1)
-		{
-			write(2, "failed to create philo live as thread\n", 39);
-			return (-1);
-		}
+			return_error("failed to create philo live as thread");
 		pthread_detach(data->philos[i].thread);
 		i++;
-		my_sleep(1000000);
+		my_sleep(1000);
 	}
 	return (0);
 }
@@ -90,11 +87,8 @@ void *monitor(void *data_tmp)
 		i = 0;
 		done = 1;
 		while (i < data->nbr_of_philo)
-		{
-			if (data->philos[i].done == 0)
+			if (data->philos[i++].done == 0)
 				done = 0;
-			i++;
-		}
 		if (done == 1)
 		{
 			pthread_mutex_lock(&data->mutex_print);
@@ -119,10 +113,7 @@ int main(int argc, char **argv)
 	int			i = 1;
 
 	if (argc != 5 && argc != 6)
-	{
-		write (2, "invalid number of arg\n", 23);
-		return (-1);
-	}
+		return_error("invalid number of arg");
 	data.nbr_of_philo = ft_atoi(argv[1]);
 	data.time_to_die = ft_atoi(argv[2]);
 	data.time_to_eat = ft_atoi(argv[3]);
