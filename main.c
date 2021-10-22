@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:18 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/19 17:08:21 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/10/22 15:13:39 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@ void ft_sleep(t_philo *philos)
 
 void eat(t_philo *philos)
 {
-	pthread_mutex_lock(&philos->data->to_do);
+	// pthread_mutex_lock(&philos->data->to_do);
 	print_message(philos->data, philos->id, EAT);
+	
 	philos->eat_count++;
+	
 	my_sleep(philos->data->time_to_eat);
-	pthread_mutex_unlock(&philos->data->to_do);
+	// pthread_mutex_unlock(&philos->data->to_do);
+	
 }
 
 void *start(void *philos_tmp)
@@ -42,12 +45,14 @@ void *start(void *philos_tmp)
 	t_philo *philos;
 	philos = philos_tmp;
 
+	philos->data->start_time = get_time();
 	while (1)
 	{	
 		if (philos->eat_count == philos->data->nbr_philo_must_eat)
 			philos->done = 1;
 		take_forks(philos);
 		eat(philos);
+		// philos->eat_count++;
 		ft_sleep(philos);
 		print_message(philos->data, philos->id, THINK);
 	}
@@ -59,17 +64,15 @@ int philo_create(t_data *data)
 {
 	int				i;
 	int				ret;
-	pthread_t		philo[data->nbr_of_philo];
 
 	i = 0;
-	data->start_time = get_time();
 	while (i < data->nbr_of_philo)
 	{
 		if (pthread_create(&(data->philos[i].thread), NULL, start, &(data->philos[i])) == -1)
 			return_error("failed to create philo live as thread");
 		pthread_detach(data->philos[i].thread);
 		i++;
-		my_sleep(1000);
+		my_sleep(10);
 	}
 	return (0);
 }
@@ -113,7 +116,9 @@ int main(int argc, char **argv)
 	int			i = 1;
 
 	if (argc != 5 && argc != 6)
-		return_error("invalid number of arg");
+		return (return_error("invalid number of arg"));
+	// my_sleep(10);
+	// return(-1);
 	data.nbr_of_philo = ft_atoi(argv[1]);
 	data.time_to_die = ft_atoi(argv[2]);
 	data.time_to_eat = ft_atoi(argv[3]);

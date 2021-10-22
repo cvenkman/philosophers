@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:12 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/19 16:57:13 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/10/22 15:20:47 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,15 @@ void my_sleep(long int time)
 	long int start_time;
 
 	start_time = get_time();
-	while (get_time() - start_time < time)
+	long int i = get_time() - start_time;
+	printf("i = %ld\n", i);
+	// printf("======== %d %d\n", get_time() - start_time, time);
+	while (i < time)
+	{
+		// printf("======== %ld %ld\n", get_time() - start_time, time);
 		usleep(1);
+		i = get_time() - start_time;
+	}
 }
 
 void print_message(t_data *data, int id, int msg)
