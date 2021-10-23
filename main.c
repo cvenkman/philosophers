@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:18 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/22 15:13:39 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/10/23 21:56:26 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,27 @@ void take_forks(t_philo *philos)
 	print_message(philos->data, philos->id, FORK);
 	pthread_mutex_lock(&(philos->data->forks[philos->r_fork]));
 	print_message(philos->data, philos->id, FORK);
+	// printf("fork\n");
 }
 
 void ft_sleep(t_philo *philos)
 {
 	print_message(philos->data, philos->id, SLEEP);
-	pthread_mutex_unlock(&(philos->data->forks[philos->l_fork]));
-	pthread_mutex_unlock(&(philos->data->forks[philos->r_fork]));
 	my_sleep(philos->data->time_to_sleep);
+	// printf("sleep\n");
 }
 
-void eat(t_philo *philos)
+void eat(t_philo *philo)
 {
-	// pthread_mutex_lock(&philos->data->to_do);
-	print_message(philos->data, philos->id, EAT);
-	
-	philos->eat_count++;
-	
-	my_sleep(philos->data->time_to_eat);
-	// pthread_mutex_unlock(&philos->data->to_do);
-	
+	// pthread_mutex_lock(&philo->data->to_do);
+	print_message(philo->data, philo->id, EAT);
+	philo->last_eat_time = get_time() - philo->data->start_time;
+	my_sleep(philo->data->time_to_eat);
+	philo->eat_count++;
+	pthread_mutex_unlock(&(philo->data->forks[philo->l_fork]));
+	pthread_mutex_unlock(&(philo->data->forks[philo->r_fork]));
+	// printf("eat\n");
+	// pthread_mutex_unlock(&philo->data->to_do);
 }
 
 void *start(void *philos_tmp)
@@ -45,8 +46,7 @@ void *start(void *philos_tmp)
 	t_philo *philos;
 	philos = philos_tmp;
 
-	philos->data->start_time = get_time();
-	while (1)
+	while (philos->data->stop != 1)
 	{	
 		if (philos->eat_count == philos->data->nbr_philo_must_eat)
 			philos->done = 1;
@@ -66,37 +66,60 @@ int philo_create(t_data *data)
 	int				ret;
 
 	i = 0;
+	data->start_time = get_time();
 	while (i < data->nbr_of_philo)
 	{
 		if (pthread_create(&(data->philos[i].thread), NULL, start, &(data->philos[i])) == -1)
 			return_error("failed to create philo live as thread");
 		pthread_detach(data->philos[i].thread);
-		i++;
-		my_sleep(10);
+		i += 2;
+		my_sleep(1000);
+	}
+	i = 1;
+	my_sleep(1000);
+	while (i < data->nbr_of_philo)
+	{
+		if (pthread_create(&(data->philos[i].thread), NULL, start, &(data->philos[i])) == -1)
+			return_error("failed to create philo live as thread");
+		pthread_detach(data->philos[i].thread);
+		i +=2;
+		my_sleep(1000);
 	}
 	return (0);
 }
-
 
 void *monitor(void *data_tmp)
 {
 	t_data	*data;
 	int		i;
 	int		done;
+	long int start_time;
 
 	data = (t_data *)data_tmp;
+	start_time = data->start_time;
 	while (1)
 	{
-		i = 0;
+		pthread_mutex_lock(&data->to_do);
+		i = -1;
 		done = 1;
-		while (i < data->nbr_of_philo)
-			if (data->philos[i++].done == 0)
+		while (++i < data->nbr_of_philo)
+		{
+			if (data->philos[i].done == 0)
 				done = 0;
+			if ((get_time() - start_time - data->philos[i].last_eat_time) >
+				data->philos[i].start_time_eat)
+			{
+				print_message(data, data->philos[i].id, DIE);
+				return (NULL);
+			}
+		}
 		if (done == 1)
 		{
+			printf("dd\n");
 			pthread_mutex_lock(&data->mutex_print);
 			return (NULL);
 		}
+		pthread_mutex_unlock(&data->to_do);
 	}
 }
 
@@ -120,16 +143,17 @@ int main(int argc, char **argv)
 	// my_sleep(10);
 	// return(-1);
 	data.nbr_of_philo = ft_atoi(argv[1]);
-	data.time_to_die = ft_atoi(argv[2]);
+	data.live_time = ft_atoi(argv[2]);
 	data.time_to_eat = ft_atoi(argv[3]);
 	data.time_to_sleep = ft_atoi(argv[4]);
 	data.nbr_philo_must_eat = 0;
+	data.stop = 0;
 	if (argc == 6)
 		data.nbr_philo_must_eat = ft_atoi(argv[5]);
 	init_philos(&data);
 	init_mutex(&data);
 	if (philo_create(&data) != 0)
 		return (-1);
-	if (argc == 6)
+	// if (argc == 6)
 		ft_monitor(&data);
 }

@@ -26,12 +26,13 @@ typedef struct s_philo
 {
 	unsigned int	limit_time;
 	unsigned int	start_time_eat;
+	unsigned int	last_eat_time;
 	int				id;
 	int				l_fork;
 	int				r_fork;
 	pthread_t		thread;
 	// int				eat_now;
-	int				done;
+	_Bool			done;
 	int				eat_count;
 	struct s_data	*data;
 }					t_philo;
@@ -39,11 +40,12 @@ typedef struct s_philo
 typedef struct	s_data
 {
 	int					nbr_of_philo;
-	int					time_to_die;
+	int					live_time;
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					nbr_philo_must_eat;
 	unsigned int		start_time;
+	_Bool				stop;
 	pthread_mutex_t		*forks;
 	t_philo				*philos;
 	pthread_mutex_t		to_do;
