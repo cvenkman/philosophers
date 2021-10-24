@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:21:36 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/18 20:13:53 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/10/23 23:43:44 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void init_philos(t_data *data)
 			data->philos[i].r_fork = 0;
 		data->philos[i].data = data;
 		data->philos[i].eat_count = 0;
+		// data->start_time
 		i++;
 	}
 }

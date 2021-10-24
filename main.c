@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:18 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/23 21:56:26 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/10/24 03:30:28 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void eat(t_philo *philo)
 void *start(void *philos_tmp)
 {
 	t_philo *philos;
-	philos = philos_tmp;
+	philos = (t_philo *)philos_tmp;
 
 	while (philos->data->stop != 1)
 	{	
@@ -67,71 +67,66 @@ int philo_create(t_data *data)
 
 	i = 0;
 	data->start_time = get_time();
+	
+	// printf("55  %llu\n", data->start_time);
 	while (i < data->nbr_of_philo)
 	{
 		if (pthread_create(&(data->philos[i].thread), NULL, start, &(data->philos[i])) == -1)
 			return_error("failed to create philo live as thread");
+		if (pthread_create(&(data->philos[i].thread), NULL, monitor, &(data->philos[i])) == -1)
+			return_error("failed to create monitor as thread");
+		pthread_join(data->philos[i].monitor, NULL);
 		pthread_detach(data->philos[i].thread);
-		i += 2;
-		my_sleep(1000);
-	}
-	i = 1;
-	my_sleep(1000);
-	while (i < data->nbr_of_philo)
-	{
-		if (pthread_create(&(data->philos[i].thread), NULL, start, &(data->philos[i])) == -1)
-			return_error("failed to create philo live as thread");
-		pthread_detach(data->philos[i].thread);
-		i +=2;
-		my_sleep(1000);
+		i++;
+		my_sleep(10);
 	}
 	return (0);
 }
 
-void *monitor(void *data_tmp)
+void *monitor(void *philos_tmp)
 {
-	t_data	*data;
+	t_philo *philo;
 	int		i;
 	int		done;
-	long int start_time;
+	unsigned int start_time;
+	pthread_mutex_t		to_do;
 
-	data = (t_data *)data_tmp;
-	start_time = data->start_time;
+	philo = (t_philo *)philos_tmp;
+	done = 0;
+	// start_time = data->start_time;
 	while (1)
 	{
-		pthread_mutex_lock(&data->to_do);
-		i = -1;
-		done = 1;
-		while (++i < data->nbr_of_philo)
+		pthread_mutex_lock(&to_do);
+		if (philo->eat_count == philo->data->nbr_philo_must_eat)
+			done++;
+		// printf("-- %d\n", done);
+			// if ((get_time() - start_time - data->philos[i].last_eat_time) >
+			// 	data->philos[i].d)
+			// {
+			// 	printf("==== %llu %llu\n", (get_time() - data->start_time),
+			// 		data->philos[i].d);
+			// 	print_message(data, data->philos[i].id, DIE);
+			// 	return (NULL);
+			// }
+		if (done >= philo->data->nbr_of_philo)
 		{
-			if (data->philos[i].done == 0)
-				done = 0;
-			if ((get_time() - start_time - data->philos[i].last_eat_time) >
-				data->philos[i].start_time_eat)
-			{
-				print_message(data, data->philos[i].id, DIE);
-				return (NULL);
-			}
+			printf("done = %d %d\n", done, philo->id);
+			pthread_mutex_lock(&philo->data->mutex_print);
+			exit (0);
 		}
-		if (done == 1)
-		{
-			printf("dd\n");
-			pthread_mutex_lock(&data->mutex_print);
-			return (NULL);
-		}
-		pthread_mutex_unlock(&data->to_do);
+		pthread_mutex_unlock(&to_do);
 	}
 }
 
-void *ft_monitor(void *data)
-{
-	pthread_t	monitor_thread;
+// void *ft_monitor(void *data)
+// {
+// 	pthread_t	monitor_thread;
 
-	if (pthread_create(&monitor_thread, NULL, monitor, (void *)data) == -1)
-		return (NULL);
-	pthread_join(monitor_thread, NULL);
-	return (NULL);
-}
+// 	if (pthread_create(&monitor_thread, NULL, monitor, (void *)data) == -1)
+// 		return (NULL);
+// 	pthread_join(monitor_thread, NULL);
+// 	return (NULL);
+// }
 
 int main(int argc, char **argv)
 {
@@ -140,13 +135,12 @@ int main(int argc, char **argv)
 
 	if (argc != 5 && argc != 6)
 		return (return_error("invalid number of arg"));
-	// my_sleep(10);
-	// return(-1);
 	data.nbr_of_philo = ft_atoi(argv[1]);
 	data.live_time = ft_atoi(argv[2]);
 	data.time_to_eat = ft_atoi(argv[3]);
 	data.time_to_sleep = ft_atoi(argv[4]);
 	data.nbr_philo_must_eat = 0;
+	data.start_time = 0;
 	data.stop = 0;
 	if (argc == 6)
 		data.nbr_philo_must_eat = ft_atoi(argv[5]);
@@ -155,5 +149,5 @@ int main(int argc, char **argv)
 	if (philo_create(&data) != 0)
 		return (-1);
 	// if (argc == 6)
-		ft_monitor(&data);
+		// ft_monitor(&data);
 }

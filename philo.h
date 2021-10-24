@@ -24,14 +24,14 @@ struct	s_data;
 
 typedef struct s_philo
 {
-	unsigned int	limit_time;
-	unsigned int	start_time_eat;
-	unsigned int	last_eat_time;
+	unsigned long long	limit_time;
+	unsigned long long	start_time_eat;
+	unsigned long long	last_eat_time;
 	int				id;
 	int				l_fork;
 	int				r_fork;
 	pthread_t		thread;
-	// int				eat_now;
+	pthread_t		monitor;
 	_Bool			done;
 	int				eat_count;
 	struct s_data	*data;
@@ -44,7 +44,7 @@ typedef struct	s_data
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					nbr_philo_must_eat;
-	unsigned int		start_time;
+	unsigned long long		start_time;
 	_Bool				stop;
 	pthread_mutex_t		*forks;
 	t_philo				*philos;
@@ -55,10 +55,11 @@ typedef struct	s_data
 	pthread_mutex_t		eat_check;
 }						t_data;
 
-unsigned int	get_time(void);
+unsigned long long	get_time(void);
 int				init_mutex(t_data *data);
 void			my_sleep(long int time);
 void			print_message(t_data *data, int id, int msg);
 void			init_philos(t_data *data);
+void *monitor(void *data_tmp);
 
 #endif
