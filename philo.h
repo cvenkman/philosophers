@@ -5,6 +5,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <sys/time.h>
+# include <stdbool.h>
 # include "libft/libft.h"
 
 #define FORK	0
@@ -27,12 +28,13 @@ typedef struct s_philo
 	unsigned long long	limit_time;
 	unsigned long long	start_time_eat;
 	unsigned long long	last_eat_time;
+	unsigned long long	live_time;
 	int				id;
 	int				l_fork;
 	int				r_fork;
 	pthread_t		thread;
 	pthread_t		monitor;
-	_Bool			done;
+	bool			done;
 	int				eat_count;
 	struct s_data	*data;
 }					t_philo;
@@ -44,8 +46,9 @@ typedef struct	s_data
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					nbr_philo_must_eat;
+	bool				is_nbr_eat;
 	unsigned long long		start_time;
-	_Bool				stop;
+	bool				stop;
 	pthread_mutex_t		*forks;
 	t_philo				*philos;
 	pthread_mutex_t		to_do;
