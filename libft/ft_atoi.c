@@ -6,9 +6,11 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 18:41:57 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/18 16:37:10 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/05/02 11:09:31 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_atoi(char const *str)
 {

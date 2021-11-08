@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 18:43:54 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/19 17:02:20 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/09/19 18:58:21 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,67 +16,45 @@
 # include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdio.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/wait.h>
+#include <stdio.h>
+#include <errno.h>
 
-size_t	ft_strlen(char const *str);
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-size_t	ft_strlcat(char *dest, const char *src, size_t size);
+void	putstr_exit(char *str);
+void	perror_exit(char *str);
+void	perror_return(char *str);
+void	ft_putnbr_fd(int n, int fd);
+void	ft_bzero(void *str, size_t n);
+void	ft_putchar_fd(char c, int fd);
+void	ft_putstr_fd(char *s, int fd);
+void	ft_putendl_fd(char *s, int fd);
 int		ft_strncmp(char const *s1, char const *s2, size_t n);
 int		ft_isprint(int sym);
 int		ft_isalpha(int sym);
 int		ft_isdigit(int sym);
 int		ft_isalnum(int sym);
 int		ft_isascii(int sym);
-int		ft_atoi(char const *str);
 int		ft_toupper(int sym);
 int		ft_tolower(int sym);
+int		error_return(char *str);
+int		ft_atoi(char const *str);
+int		perror_return_number(char *str, int num);
 int		ft_strcmp(char const *str1, char const *str2);
-int		ft_memcmp(void const *str1, void const *str2, size_t n);
-void	*ft_memchr(const void *str, int sym, size_t n);
-void	*ft_memcpy(void *dest, const void *src, size_t n);
-void	*ft_memset(void *str, int sym, size_t n);
-void	ft_bzero(void *str, size_t n);
-void	*ft_memccpy(void *dest, const void *src, int sym, size_t n);
+void	*error_return_void(char *str);
 void	*ft_calloc(size_t n, size_t size);
-void	ft_putchar_fd(char c, int fd);
-void	ft_putstr_fd(char *s, int fd);
-void	ft_putendl_fd(char *s, int fd);
-void	ft_putnbr_fd(int n, int fd);
-void	*ft_memmove(void *dest, const void *src, size_t n);
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
-char	*ft_strstr(const char *haystack, const char *needle);
+char	*ft_itoa(int n);
 char	*ft_strdup(const char *str);
 char	*ft_strchr(const char *str, int sym);
 char	*ft_strrchr(const char *str, int sym);
-char	*ft_itoa(int n);
-char	*ft_strtrim(char const *s1, char const *set);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strnstr(const char *big, const char *little, size_t n);
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-char	*ft_strtrim(char const *s1, char const *set);
-char	**ft_split(char const *s, char c);
 char	*ft_strcpy(char *dst, const char *src);
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}				t_list;
-t_list	*ft_lstnew(void *content);
-t_list	*ft_lstlast(t_list *lst);
-void	ft_lstadd_front(t_list **lst, t_list *new);
-void	ft_lstadd_back(t_list **lst, t_list *new);
-void	ft_lstdelone(t_list *lst, void (*del)(void *));
-void	ft_lstclear(t_list **lst, void (*del)(void *));
-void	ft_lstiter(t_list *lst, void (*f)(void *));
-void	putstr_exit(char *str);
-int		ft_lstsize(t_list *lst);
-void	perror_exit(char *str);
-long	max(long a, long b);
-long	min(long a, long b);
-int		return_error(char *str);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strtrim(char const *s1, char const *set);
+char	*ft_strtrim(char const *s1, char const *set);
+char	*ft_strstr(const char *haystack, const char *needle);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strnstr(const char *big, const char *little, size_t n);
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+char	**ft_split(char const *s, char c);
+size_t	ft_strlen(char const *str);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 
 #endif

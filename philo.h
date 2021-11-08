@@ -29,6 +29,7 @@ typedef struct s_philo
 	unsigned long long	start_time_eat;
 	unsigned long long	last_eat_time;
 	unsigned long long	live_time;
+	unsigned long long	start_day;
 	int				id;
 	int				l_fork;
 	int				r_fork;
@@ -36,6 +37,7 @@ typedef struct s_philo
 	pthread_t		monitor;
 	bool			done;
 	int				eat_count;
+	
 	struct s_data	*data;
 }					t_philo;
 
@@ -63,6 +65,6 @@ int				init_mutex(t_data *data);
 void			my_sleep(long int time);
 void			print_message(t_data *data, int id, int msg);
 void			init_philos(t_data *data);
-void *monitor(void *data_tmp);
+void	*ft_monitor(void *data);
 
 #endif
