@@ -1,24 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   array.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/22 18:43:20 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/08 19:42:35 by cvenkman         ###   ########.fr       */
+/*   Created: 2021/11/08 19:43:33 by cvenkman          #+#    #+#             */
+/*   Updated: 2021/11/08 19:43:41 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(char const *str)
+void free_arr(char **arr)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	while (str[i])
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
+int	arr_len(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr)
+		return (0);
+	while (arr[i] != NULL)
 		i++;
 	return (i);
 }
-

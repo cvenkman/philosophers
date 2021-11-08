@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/19 19:02:31 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/03 15:26:45 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/08 20:34:25 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	perror_return_number(char *str, int num)
 int	error_return(char *str)
 {
 	ft_putendl_fd(str, 2);
-	return (-1);
+	return (1);
 }
 
 /**

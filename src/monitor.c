@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:35:22 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/08 18:36:48 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/08 23:38:10 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static void *monitor(void *data_tmp)
 			if (data->is_nbr_eat == true)
 				if (!ft_check_eat(&data->philos[i]))
 					return (0);
+			// if (get_time() -  data->philos[i].start_day -  data->philos[i].last_eat_time >
+			// 	data->live_time)
 			if (data->philos[i].last_eat_time > data->live_time)
 			{
 				pthread_mutex_lock(&data->mutex_print);

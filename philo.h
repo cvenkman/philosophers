@@ -28,7 +28,6 @@ typedef struct s_philo
 	unsigned long long	limit_time;
 	unsigned long long	start_time_eat;
 	unsigned long long	last_eat_time;
-	unsigned long long	live_time;
 	unsigned long long	start_day;
 	int				id;
 	int				l_fork;
@@ -64,7 +63,8 @@ unsigned long long	get_time(void);
 int				init_mutex(t_data *data);
 void			my_sleep(long int time);
 void			print_message(t_data *data, int id, int msg);
-void			init_philos(t_data *data);
+int			init_philos(t_data *data);
 void	*ft_monitor(void *data);
-
+char	**validation(char **argv, int i);
+int	init_valid_argv(char **argv, t_data *data);
 #endif

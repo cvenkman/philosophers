@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:18 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/08 18:36:57 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/08 23:40:16 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,27 @@ void take_forks(t_philo *philos)
 
 void ft_sleep(t_philo *philo)
 {
-	philo->live_time = get_time() - philo->data->start_time;
+	// philo->live_time = get_time() - philo->data->start_time;
 	print_message(philo->data, philo->id, SLEEP);
 	my_sleep(philo->data->time_to_sleep);
+	// philo->last_eat_time = get_time() - philo->data->start_time - philo->start_day;
+	// printf("last_eat_time   %llu\n", philo->last_eat_time);
 	// printf("#########  %llu   %llu\n", philo->last_eat_time, get_time() - philo->data->start_time);
 }
 
 void eat(t_philo *philo)
 {
-	// pthread_mutex_lock(&philo->data->to_do);
 	print_message(philo->data, philo->id, EAT);
 	my_sleep(philo->data->time_to_eat);
-	philo->eat_count++;
+	pthread_mutex_lock(&philo->data->to_do);
 	philo->last_eat_time = get_time() - philo->data->start_time - philo->start_day;
+	printf("last_eat_time   %llu\n", philo->last_eat_time);
+	pthread_mutex_unlock(&philo->data->to_do);
+	// philo->last_eat_time = get_time() - philo->data->start_time - philo->start_day;
 	// printf("last_eat_time   %llu\n", philo->last_eat_time);
+	philo->eat_count++;
 	pthread_mutex_unlock(&(philo->data->forks[philo->l_fork]));
 	pthread_mutex_unlock(&(philo->data->forks[philo->r_fork]));
-	// pthread_mutex_unlock(&philo->data->to_do);
 }
 
 void *start(void *philo_tmp)
@@ -75,6 +79,7 @@ int philo_create(t_data *data)
 		my_sleep(10);
 	}
 	i = 1;
+	my_sleep(10);
 	while (i < data->nbr_of_philo)
 	{
 		if (pthread_create(&(data->philos[i].thread), NULL, start, &(data->philos[i])) == -1)
@@ -85,35 +90,47 @@ int philo_create(t_data *data)
 	return (0);
 }
 
+int init_argv(int argc, char **argv, t_data *data)
+{
+	char **valid_arg;
+	char **if_one_arg;
+	if (argc == 2)
+	{
+		if_one_arg = ft_split(argv[1], ' ');
+		if (arr_len(if_one_arg) != 5 && arr_len(if_one_arg) != 6)
+			return (error_return("invalid number of arguments"));
+		valid_arg = validation(if_one_arg, 0);
+		free_arr(if_one_arg);
+	}
+	else
+	{
+		if (argc != 5 && argc != 6)
+			return (error_return("invalid number of arguments"));
+		valid_arg = validation(argv, 1);
+	}
+	if (!valid_arg)
+		return (error_return("invalid arguments"));
+	init_valid_argv(valid_arg, data);
+	free_arr(valid_arg);
+	return (0);
+}
+
 int main(int argc, char **argv)
 {
 	t_data		data;
-	int			i = 1;
+	int			i = 0;
 
-	if (argc != 5 && argc != 6)
-		return (error_return("invalid number of arg"));
-	data.nbr_of_philo = ft_atoi(argv[1]);
-	data.live_time = ft_atoi(argv[2]);
-	data.time_to_eat = ft_atoi(argv[3]);
-	data.time_to_sleep = ft_atoi(argv[4]);
-	data.nbr_philo_must_eat = 0;
-	data.start_time = 0;
-	data.stop = 0;
-	data.is_nbr_eat = false;
-	if (argc == 6)
-	{
-		data.nbr_philo_must_eat = ft_atoi(argv[5]);
-		data.is_nbr_eat = true;
-	}
-	init_philos(&data);
-	init_mutex(&data);
+
+	if (init_argv(argc, argv, &data) ||
+		init_philos(&data) || init_mutex(&data))
+		return (error_return("malloc error"));
 	if (philo_create(&data) != 0)
-		return (-1);
-	ft_monitor(&data);
+		return (1);
 	i = 0;
 	while (i < data.nbr_of_philo)
 	{
 		pthread_detach(data.philos[i].thread);
 		i++;
 	}
+	ft_monitor(&data);
 }

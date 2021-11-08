@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 18:43:54 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/09/19 18:58:21 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/08 19:44:03 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <errno.h>
 
+void	free_arr(char **arr);
 void	putstr_exit(char *str);
 void	perror_exit(char *str);
 void	perror_return(char *str);
@@ -28,6 +29,7 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 int		ft_strncmp(char const *s1, char const *s2, size_t n);
+int		arr_len(char **arr);
 int		ft_isprint(int sym);
 int		ft_isalpha(int sym);
 int		ft_isdigit(int sym);
