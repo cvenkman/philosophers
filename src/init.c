@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:21:36 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/11 03:42:29 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/11 16:11:49 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ int	init_valid_argv(char **argv, t_data *data)
 	data->nbr_philo_must_eat = 0;
 	data->start_time = 0;
 	data->is_nbr_eat = false;
+	data->done = 0;
+	data->end = false;
 	if (arr_len(argv) == 5)
 	{
 		data->nbr_philo_must_eat = ft_atoi(argv[4]);

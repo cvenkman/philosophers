@@ -48,6 +48,8 @@ typedef struct	s_data
 	int					nbr_philo_must_eat;
 	bool				is_nbr_eat;
 	unsigned long long		start_time;
+	int					done;
+	bool end;
 	bool				stop;
 	pthread_mutex_t		*forks;
 	t_philo				*philos;

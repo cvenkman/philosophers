@@ -3,6 +3,6 @@
 for ((;;))
 do
 	clear
-	leaks a.out | grep -A10 for
+	leaks philo | grep -A10 for
 	sleep 1
 done

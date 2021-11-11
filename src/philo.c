@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:18 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/11 03:54:02 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/11 16:47:09 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,15 @@ void *start(void *philo_tmp)
 	t_philo *philo;
 	philo = (t_philo *)philo_tmp;
 	philo->start_philo_life = get_time();
-	while (philo->data->stop != 1)
+	while (1)
 	{
+		if (philo->data->is_nbr_eat == true)
+		{
+			if (philo->eat_count == philo->data->nbr_philo_must_eat)
+				philo->data->done++;
+			if (philo->data->done >= philo->data->nbr_of_philo)
+				philo->data->end = true;
+		}
 		take_forks(philo);
 		eat(philo);
 		ft_sleep(philo);
@@ -63,13 +70,19 @@ int philo_create(t_data *data)
 	{
 		if (pthread_create(&(data->philos[i].thread), NULL, start, &(data->philos[i])) == -1)
 			error_return("failed to create philo live as thread");
-		i++;
-		my_sleep(1);
+		i += 2;
+		my_sleep(10);
+	}
+	i = 1;
+	while (i < data->nbr_of_philo)
+	{
+		if (pthread_create(&(data->philos[i].thread), NULL, start, &(data->philos[i])) == -1)
+			error_return("failed to create philo live as thread");
+		i += 2;
+		my_sleep(10);
 	}
 	return (0);
 }
-
-
 
 int main(int argc, char **argv)
 {
@@ -81,8 +94,8 @@ int main(int argc, char **argv)
 		return (1);
 	if (philo_create(&data) != 0)
 		return (1);
-	ft_monitor(&data);
 	i = 0;
+	ft_monitor(&data);
 	while (i < data.nbr_of_philo)
 	{
 		pthread_detach(data.philos[i].thread);
