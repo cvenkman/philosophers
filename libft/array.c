@@ -6,13 +6,13 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:43:33 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/08 19:43:41 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/11 18:03:10 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void free_arr(char **arr)
+void	free_arr(char **arr)
 {
 	int	i;
 

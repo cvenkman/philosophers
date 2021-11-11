@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 18:43:54 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/08 19:44:03 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/11 18:04:28 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
+# include <stdio.h>
+# include <errno.h>
 
 void	free_arr(char **arr);
 void	putstr_exit(char *str);
@@ -39,7 +39,6 @@ int		ft_toupper(int sym);
 int		ft_tolower(int sym);
 int		error_return(char *str);
 int		ft_atoi(char const *str);
-int		perror_return_number(char *str, int num);
 int		ft_strcmp(char const *str1, char const *str2);
 void	*error_return_void(char *str);
 void	*ft_calloc(size_t n, size_t size);

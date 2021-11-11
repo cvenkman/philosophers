@@ -6,36 +6,30 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:12 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/11 02:59:21 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/11 18:08:13 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-unsigned long long	get_time(void)
+unsigned long	get_time(void)
 {
 	struct timeval	time;
 
 	gettimeofday(&time, NULL);
-	// printf("+++  %d\n", (time.tv_sec * 1000) + (time.tv_usec / 1000));
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void my_sleep(long int time)
+void	my_sleep(unsigned long time)
 {
-	long int start_time;
+	unsigned long	start_time;
 
 	start_time = get_time();
-	// printf("i = %ld\n", i);
-	// printf("======== %d %d\n", get_time() - start_time, time);
 	while (get_time() - start_time < time)
-	{
-		// printf("======== %ld %ld\n", get_time() - start_time, time);
 		usleep(1);
-	}
 }
 
-void print_message(t_data *data, int id, int msg)
+void	print_message(t_data *data, int id, int msg)
 {
 	pthread_mutex_lock(&data->mutex_print);
 	ft_putnbr_fd(get_time() - data->start_time, 1);

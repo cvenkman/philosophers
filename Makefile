@@ -1,11 +1,13 @@
 NAME =		philo
 
 SRCS =		src/philo.c		src/utils.c		src/init.c\
-			src/monitor.c	src/validation.c
+			src/monitor.c	src/main.c
 
 OBJS =		$(SRCS:.c=.o)
 
 HEADER =	philo.h
+
+CFLAGS =	-Wall -Wextra -Werror
 
 CC = 		gcc
 

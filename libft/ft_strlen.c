@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 18:43:20 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/08 19:42:35 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/11 18:04:18 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,3 @@ size_t	ft_strlen(char const *str)
 		i++;
 	return (i);
 }
-
