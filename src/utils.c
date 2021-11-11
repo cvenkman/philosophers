@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 18:23:12 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/10/24 03:01:12 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/11 02:59:21 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,5 @@ void print_message(t_data *data, int id, int msg)
 		ft_putendl_fd(Y" is sleeping"RS, 1);
 	if (msg == 3)
 		ft_putendl_fd(X" is thinking"RS, 1);
-	if (msg == 4)
-		ft_putendl_fd(R" died"RS, 1);
 	pthread_mutex_unlock(&data->mutex_print);
 }

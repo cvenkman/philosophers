@@ -12,7 +12,6 @@
 #define EAT 	1
 #define SLEEP 	2
 #define THINK	3
-#define DIE		4
 
 # define R	"\x1b[31m"
 # define G	"\x1b[32m"
@@ -28,7 +27,7 @@ typedef struct s_philo
 	unsigned long long	limit_time;
 	unsigned long long	start_time_eat;
 	unsigned long long	last_eat_time;
-	unsigned long long	start_day;
+	unsigned long long	start_philo_life;
 	int				id;
 	int				l_fork;
 	int				r_fork;
@@ -67,4 +66,5 @@ int			init_philos(t_data *data);
 void	*ft_monitor(void *data);
 char	**validation(char **argv, int i);
 int	init_valid_argv(char **argv, t_data *data);
+int		init_argv(int argc, char **argv, t_data *data);
 #endif

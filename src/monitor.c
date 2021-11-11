@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:35:22 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/08 23:38:10 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/11 03:51:12 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ static int	ft_check_eat(t_philo *philo)
 
 	if (philo->eat_count == philo->data->nbr_philo_must_eat)
 		done++;
+	// printf("!! %d\n", done);
 	if (done >= philo->data->nbr_of_philo)
 	{
-		// printf("done = %d %d\n", done, philo->data->nbr_of_philo);
 		pthread_mutex_lock(&philo->data->mutex_print);
 		return (0);
 	}
@@ -29,28 +29,24 @@ static int	ft_check_eat(t_philo *philo)
 
 static void *monitor(void *data_tmp)
 {
-	t_data *data;
+	t_data	*data;
 	int		i;
-	int		done;
-	unsigned int start_time;
-	pthread_mutex_t		to_do;
 
 	data = (t_data *)data_tmp;
-	done = 0;
 	while (1)
 	{
 		i = 0;
+		usleep(50);
 		while (i < data->nbr_of_philo)
 		{
 			if (data->is_nbr_eat == true)
 				if (!ft_check_eat(&data->philos[i]))
 					return (0);
-			// if (get_time() -  data->philos[i].start_day -  data->philos[i].last_eat_time >
-			// 	data->live_time)
-			if (data->philos[i].last_eat_time > data->live_time)
+			if (get_time() -  data->philos[i].start_philo_life - data->philos[i].last_eat_time >
+				data->live_time)
 			{
 				pthread_mutex_lock(&data->mutex_print);
-				printf("dddddddd   %llu\n", data->philos[i].last_eat_time);
+				printf(R"%llu %d died\n"RS, get_time() - data->start_time, i + 1);
 				return (0);
 			}
 			i++;

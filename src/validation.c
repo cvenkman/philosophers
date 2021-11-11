@@ -6,13 +6,13 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:29:01 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/08 20:30:16 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/11 03:33:05 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-char	**validation(char **argv, int i)
+char	**validation2(char **argv, int i)
 {
 	int		j;
 	int		len;
@@ -35,7 +35,6 @@ char	**validation(char **argv, int i)
 		i++;
 		j++;
 	}
-	
 	new_arg[j] = NULL;
 	return (new_arg);
 }
