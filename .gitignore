@@ -1,2 +1,4 @@
 *.o
 philo
+.DS_Store
+leaks.sh
