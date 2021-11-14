@@ -6,7 +6,7 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:01:50 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/11 18:02:55 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/14 02:59:00 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,16 @@ typedef struct s_data
 
 // src/utilsc.
 void			my_sleep(unsigned long time);
-void			print_message(t_data *data, int id, int msg);
+void			print_message(t_data *data, int id, char *msg);
 unsigned long	get_time(void);
-
+int get_msg_complete(char (*msg_complete)[50], t_data *data, int id, char *msg);
 // src/init.c
 int				init_mutex(t_data *data);
 int				init_philos(t_data *data);
 int				init_argv(int argc, char **argv, t_data *data);
 
 // src/monitor.c
-void			*ft_monitor(void *data);
+void			*monitor(void *data_tmp);
 
 // src/philo.c
 void			*start(void *philo_tmp);

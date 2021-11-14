@@ -6,22 +6,24 @@
 /*   By: cvenkman <cvenkman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:35:22 by cvenkman          #+#    #+#             */
-/*   Updated: 2021/11/11 18:18:05 by cvenkman         ###   ########.fr       */
+/*   Updated: 2021/11/14 03:14:14 by cvenkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-static void	*monitor(void *data_tmp)
+void	*monitor(void *data_tmp)
 {
 	t_data	*data;
 	int		i;
+	char	msg_complete[50];
+	int		msg_len;
 
 	data = (t_data *)data_tmp;
 	while (1)
 	{
 		i = 0;
-		usleep(50);
+		usleep(300);
 		while (i < data->nbr_of_philo)
 		{
 			if (data->end == true)
@@ -30,20 +32,11 @@ static void	*monitor(void *data_tmp)
 				- data->philos[i].last_eat_time > data->live_time)
 			{
 				pthread_mutex_lock(&data->mutex_print);
-				printf(R"%lu %d died\n"RS, get_time() - data->start_time, i + 1);
+				msg_len = get_msg_complete(&msg_complete, data, i + 1, "\x1b[31m died\x1b[0m");
+				write(1, msg_complete, msg_len);
 				return (0);
 			}
 			i++;
 		}
 	}
-}
-
-void	*ft_monitor(void *data)
-{
-	pthread_t	monitor_thread;
-
-	if (pthread_create(&monitor_thread, NULL, monitor, (void *)data) == -1)
-		error_return_void("failed to create monitor as thread");
-	pthread_join(monitor_thread, NULL);
-	return (NULL);
 }

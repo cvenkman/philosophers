@@ -2,3 +2,5 @@
 philo
 .DS_Store
 leaks.sh
+a.out
+.gitignore
